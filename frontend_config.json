@@ -1,0 +1,24 @@
+{
+  "networks": {
+    "baseSepolia": {
+      "chainId": 84532,
+      "name": "Base Sepolia",
+      "contracts": {
+        "jUSDi": "0x6dD08492E3532C15Abe9c0aDa7565b136b398Ba7",
+        "JUSDiVault": "0xc698e233fbB9810Ae0F22e154Ee0912Fa188C69c",
+        "JubileeLending": "0xD9A27A8183d1de0A20d4343Fe63aA119EDa80f00",
+        "CollateralManager": "0x0cdE481F3Bf3CBf8f0048DBe16F7477913e6700A",
+        "OracleAggregator": "0x5D6cF6D868b5B00C292B87C651d5d241E17a865a",
+        "YieldRouter": "0x812C63d84043486652467F3552f47e29d75aFA5e"
+      }
+    },
+    "sepolia": {
+      "chainId": 11155111,
+      "name": "Sepolia",
+      "contracts": {
+        "jETHs_Strategy": "0x27143095013184e718f92330C32A3D2eE9974053",
+        "jETHs_Vault": "0x08Bc3F12Dd327739B3BC613A6640aCa3B67D5Be6"
+      }
+    }
+  }
+}

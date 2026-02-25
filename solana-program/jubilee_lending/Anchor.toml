@@ -1,0 +1,18 @@
+[toolchain]
+
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+jubilee_lending = "EQQFiZ4hKQkmZrn2xHKap6NQcLGg1M5aU1d9pXGefZcQ"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Localnet"
+wallet = "/Users/cmpgfb/.config/solana/id.json"
+
+[scripts]
+test = "yarn run mocha -t 1000000 tests/"
