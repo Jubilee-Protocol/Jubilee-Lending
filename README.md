@@ -6,9 +6,9 @@
 [![Audit](https://img.shields.io/badge/Audit-20%2F20%20Fixed-brightgreen)](docs/AUDIT_REPORT.md)
 [![Donate Crypto](https://img.shields.io/badge/Donate-Crypto-f7931a?logo=bitcoin&logoColor=white)](https://commerce.coinbase.com/checkout/122a2979-e559-44b9-bb9d-2ff0c6a3025b)
 
-> Self-repaying, interest-free loans backed by yield-bearing Bitcoin collateral. Borrow jUSDi against jBTCi and jETHs — your collateral's yield pays your debt automatically.
+> Self-repaying, interest-free loans backed by yield-bearing collateral. Borrow jUSDi against jBTCi and jETHs — your collateral's yield pays your debt automatically.
 
-**Website**: https://jubileeprotocol.com  
+**Website**: https://jubileeprotocol.xyz  
 **Whitepaper**: [Jubilee Protocol v3](docs/WHITEPAPER.md)  
 **Contract**: [`0x1b55eF520AEf9c2657C99343738641dCC92a840F`](https://sepolia.basescan.org/address/0x1b55eF520AEf9c2657C99343738641dCC92a840F)  
 **Status**: 🟢 **LIVE on Base Sepolia** — Deployed Feb 25, 2026
