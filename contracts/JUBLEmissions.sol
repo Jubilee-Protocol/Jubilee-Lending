@@ -98,6 +98,13 @@ contract JUBLEmissions is Ownable, ReentrancyGuard {
      * @notice Update reward accounting. Call before any stake/unstake.
      */
     function updateReward(address user) public {
+        // RT-06 FIX: Only JUBLBoost or the user themselves can update rewards
+        require(
+            msg.sender == address(jublBoost) ||
+                msg.sender == user ||
+                msg.sender == owner(),
+            "Unauthorized"
+        );
         rewardPerTokenStored = rewardPerToken();
         lastUpdateTime = block.timestamp;
 

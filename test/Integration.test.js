@@ -153,7 +153,11 @@ describe("Jubilee Protocol Integration Tests", function () {
             await jubileeLending.connect(user1).depositCollateral(wbtc.target, ethers.parseUnits("1", 18));
             await jubileeLending.connect(user1).borrow(1, ethers.parseUnits("50000", 18));
 
-            // Try to unstake → should revert
+            // Fast-forward past 7-day minimum stake duration
+            await ethers.provider.send("evm_increaseTime", [7 * 24 * 60 * 60 + 1]);
+            await ethers.provider.send("evm_mine");
+
+            // Try to unstake → should revert due to unhealthy position
             await expect(jublBoost.connect(user1).unstake(ethers.parseUnits("5000", 18)))
                 .to.be.revertedWith("Unstaking would cause liquidatability");
         });

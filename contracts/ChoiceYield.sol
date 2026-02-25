@@ -29,6 +29,7 @@ contract ChoiceYield is Ownable, ReentrancyGuard {
     error OnlyJUBLBoost();
 
     IJUBLBoost public jublBoost;
+    address public feeCollector; // RT-05: restrict depositRevenue caller
 
     // Supported reward assets (e.g., jBTCi, jETHs)
     address[] public rewardAssets;
@@ -72,6 +73,11 @@ contract ChoiceYield is Ownable, ReentrancyGuard {
         jublBoost = IJUBLBoost(_jublBoost);
     }
 
+    function setFeeCollector(address _feeCollector) external onlyOwner {
+        require(_feeCollector != address(0), "Invalid fee collector");
+        feeCollector = _feeCollector;
+    }
+
     // ─── Reward Accounting ───────────────────────────────────────────
 
     /**
@@ -85,6 +91,11 @@ contract ChoiceYield is Ownable, ReentrancyGuard {
      * @notice Called by FeeCollector to deposit revenue for distribution.
      */
     function depositRevenue(address asset, uint256 amount) external {
+        // RT-05 FIX: Only FeeCollector can deposit revenue
+        require(
+            feeCollector == address(0) || msg.sender == feeCollector,
+            "Only FeeCollector"
+        );
         // H-05 FIX: Only accept registered reward assets (no auto-add)
         require(isRewardAsset[asset], "Asset not registered");
         require(amount > 0, "Amount must be > 0");

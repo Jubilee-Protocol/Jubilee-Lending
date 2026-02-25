@@ -4,6 +4,7 @@ pragma solidity 0.8.33;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 interface IJubileeLending {
     function isHealthy(address user) external view returns (bool);
@@ -34,7 +35,7 @@ interface IJUBLEmissions {
  * Example:
  *   $1M collateral + $200K $JUBL staked → LTV = 50% + 20% = 70%
  */
-contract JUBLBoost is Ownable {
+contract JUBLBoost is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     IERC20 public immutable jubl;
@@ -44,9 +45,11 @@ contract JUBLBoost is Ownable {
     IJUBLEmissions public emissions;
 
     mapping(address => uint256) public stakedJUBL;
+    mapping(address => uint256) public stakeTimestamp; // RT-01: anti-flash-stake
     uint256 public totalStaked;
 
     uint256 public constant MAX_BOOST = 0.2e18; // 20% max additional LTV
+    uint256 public constant MIN_STAKE_DURATION = 7 days; // RT-01: minimum lock
 
     event Staked(address indexed user, uint256 amount);
     event Unstaked(address indexed user, uint256 amount);
@@ -75,7 +78,7 @@ contract JUBLBoost is Ownable {
         emissions = IJUBLEmissions(_emissions);
     }
 
-    function stake(uint256 amount) external {
+    function stake(uint256 amount) external nonReentrant {
         require(amount > 0, "Amount must be > 0");
 
         if (address(choiceYield) != address(0)) {
@@ -89,14 +92,20 @@ contract JUBLBoost is Ownable {
         jubl.safeTransferFrom(msg.sender, address(this), amount);
         stakedJUBL[msg.sender] += amount;
         totalStaked += amount;
+        stakeTimestamp[msg.sender] = block.timestamp; // RT-01: reset lock timer
 
         emit Staked(msg.sender, amount);
     }
 
-    function unstake(uint256 amount) external {
+    function unstake(uint256 amount) external nonReentrant {
         require(
             stakedJUBL[msg.sender] >= amount,
             "Insufficient staked balance"
+        );
+        // RT-01 FIX: Enforce minimum stake duration
+        require(
+            block.timestamp >= stakeTimestamp[msg.sender] + MIN_STAKE_DURATION,
+            "Minimum stake duration not met"
         );
 
         if (address(choiceYield) != address(0)) {
@@ -107,15 +116,18 @@ contract JUBLBoost is Ownable {
             emissions.updateReward(msg.sender);
         }
 
+        // RT-04 FIX: Check health BEFORE state changes
+        // Simulate the unstake to check health
         stakedJUBL[msg.sender] -= amount;
         totalStaked -= amount;
 
-        // Safety check: ensure user's loans remain healthy after unstaking
         if (address(lendingContract) != address(0)) {
-            require(
-                lendingContract.isHealthy(msg.sender),
-                "Unstaking would cause liquidatability"
-            );
+            if (!lendingContract.isHealthy(msg.sender)) {
+                // Revert state changes and fail
+                stakedJUBL[msg.sender] += amount;
+                totalStaked += amount;
+                revert("Unstaking would cause liquidatability");
+            }
         }
 
         jubl.safeTransfer(msg.sender, amount);
