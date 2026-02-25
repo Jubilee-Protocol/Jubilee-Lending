@@ -89,9 +89,9 @@ Jubilee Lending is the non-custodial, over-collateralized lending engine of the 
 | OracleAggregator | [`0x06a524f5087E1491aD5d0E86732B74e8874358c4`](https://sepolia.basescan.org/address/0x06a524f5087E1491aD5d0E86732B74e8874358c4) |
 | LiquidationEngine | [`0x58B83cc548E3811c63C75331C3f919116c832F2E`](https://sepolia.basescan.org/address/0x58B83cc548E3811c63C75331C3f919116c832F2E) |
 | YieldRouter | [`0xdaA1036227a5695E92c427c494E47Ba641434334`](https://sepolia.basescan.org/address/0xdaA1036227a5695E92c427c494E47Ba641434334) |
-| JUBLBoost | [`0xccF8535A89F352c30593FDe48e1caD2275f879f0`](https://sepolia.basescan.org/address/0xccF8535A89F352c30593FDe48e1caD2275f879f0) |
-| JUBLEmissions | [`0x79a5717c35C2669816Fee86aD9a43120255D604F`](https://sepolia.basescan.org/address/0x79a5717c35C2669816Fee86aD9a43120255D604F) |
-| ChoiceYield | [`0x56420dE894faC21080e18fD3D7AebBb692F241B1`](https://sepolia.basescan.org/address/0x56420dE894faC21080e18fD3D7AebBb692F241B1) |
+| JUBLBoost | [`0x03beBEE45001eA239588dFF9a42aD1aB330Bb6cC`](https://sepolia.basescan.org/address/0x03beBEE45001eA239588dFF9a42aD1aB330Bb6cC) |
+| JUBLEmissions | [`0x77A2fB1BE81Eee71f228a1525c0E4ebBdeec225f`](https://sepolia.basescan.org/address/0x77A2fB1BE81Eee71f228a1525c0E4ebBdeec225f) |
+| ChoiceYield | [`0x9CCabBdE55943E430bc1DF881cd32B2ab7Fe234f`](https://sepolia.basescan.org/address/0x9CCabBdE55943E430bc1DF881cd32B2ab7Fe234f) |
 | FeeCollector | [`0x4AA60050377fC6519AaC76633599141BbeD16bfB`](https://sepolia.basescan.org/address/0x4AA60050377fC6519AaC76633599141BbeD16bfB) |
 | FirstFruitsFund | [`0xe297E5c4408e6f9bebdb2180F4d68E38c3915014`](https://sepolia.basescan.org/address/0xe297E5c4408e6f9bebdb2180F4d68E38c3915014) |
 | EmergencyModule | [`0x68da820EfDb3Af6bb68F4Fb0Ff9368921eD12957`](https://sepolia.basescan.org/address/0x68da820EfDb3Af6bb68F4Fb0Ff9368921eD12957) |
