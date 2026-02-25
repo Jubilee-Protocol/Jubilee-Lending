@@ -85,6 +85,7 @@ contract JubileeLending is Pausable, Ownable, ReentrancyGuard {
         uint256 amount
     );
     event CollateralWithdrawn(uint256 indexed loanId, uint256 amount);
+    event CollateralAdded(uint256 indexed loanId, uint256 amount);
     event Liquidated(
         uint256 indexed loanId,
         address indexed liquidator,
@@ -149,6 +150,31 @@ contract JubileeLending is Pausable, Ownable, ReentrancyGuard {
         userLoans[msg.sender].push(loanCounter);
 
         emit LoanCreated(loanCounter, msg.sender, asset, amount);
+    }
+
+    /**
+     * @notice Add more collateral to an existing loan.
+     * @dev H-04 FIX: Allows users to strengthen their position without creating a new loan.
+     * @param loanId The loan to add collateral to.
+     * @param amount The amount of additional collateral.
+     */
+    function addCollateral(
+        uint256 loanId,
+        uint256 amount
+    ) external nonReentrant whenNotPaused {
+        Loan storage loan = loans[loanId];
+        require(loan.active, "Loan not active");
+        require(loan.borrower == msg.sender, "Not borrower");
+        require(amount > 0, "Amount must be > 0");
+
+        IERC20(loan.collateralAsset).safeTransferFrom(
+            msg.sender,
+            address(this),
+            amount
+        );
+        loan.collateralAmount += amount;
+
+        emit CollateralAdded(loanId, amount);
     }
 
     function borrow(
