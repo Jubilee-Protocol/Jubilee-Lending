@@ -68,7 +68,14 @@ contract JUBLVesting is Ownable, ReentrancyGuard {
         require(beneficiary != address(0), "Invalid beneficiary");
         require(amount > 0, "Amount must be > 0");
         require(vestingDuration >= cliffDuration, "Vesting < cliff");
-        // M-04: Removed single-schedule restriction to allow multiple vesting rounds
+        // JH-01 FIX: Prevent overwriting active schedules
+        VestingSchedule storage existing = schedules[beneficiary];
+        require(
+            existing.totalAmount == 0 ||
+                existing.revoked ||
+                _vestedAmount(existing) == existing.totalAmount,
+            "Active schedule exists"
+        );
 
         schedules[beneficiary] = VestingSchedule({
             totalAmount: amount,
@@ -122,6 +129,14 @@ contract JUBLVesting is Ownable, ReentrancyGuard {
 
         uint256 vested = _vestedAmount(schedule);
         uint256 unvested = schedule.totalAmount - vested;
+
+        // JL-02 FIX: Auto-release vested tokens to beneficiary
+        uint256 claimable = vested - schedule.released;
+        if (claimable > 0) {
+            schedule.released += claimable;
+            jubl.safeTransfer(beneficiary, claimable);
+            emit TokensReleased(beneficiary, claimable);
+        }
 
         schedule.revoked = true;
         totalAllocated -= unvested;

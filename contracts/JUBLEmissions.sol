@@ -51,6 +51,8 @@ contract JUBLEmissions is Ownable, ReentrancyGuard {
     event EmissionsStarted(uint256 timestamp);
 
     constructor(address _jubl, address _jublBoost) {
+        require(_jubl != address(0), "Invalid JUBL"); // JH-02
+        require(_jublBoost != address(0), "Invalid JUBLBoost"); // JH-02
         jubl = IJUBL(_jubl);
         jublBoost = IJUBLBoost(_jublBoost);
     }
